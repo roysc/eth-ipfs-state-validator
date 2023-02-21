@@ -63,17 +63,17 @@ var (
 
 // NewPGIPFSValidator returns a new trie validator ontop of a connection pool for an IPFS backing Postgres database
 func NewPGIPFSValidator(db *sqlx.DB, par Params) *Validator {
-	kvs := pgipfsethdb.NewKeyValueStore(db, pgipfsethdb.CacheConfig{
+	kvs := pgipfsethdb.NewDatabase(db, pgipfsethdb.CacheConfig{
 		Name:           "kv",
 		Size:           16 * 1000 * 1000, // 16MB
 		ExpiryDuration: time.Hour * 8,    // 8 hours
-	})
+	}, false)
 
 	database := pgipfsethdb.NewDatabase(db, pgipfsethdb.CacheConfig{
 		Name:           "db",
 		Size:           16 * 1000 * 1000, // 16MB
 		ExpiryDuration: time.Hour * 8,    // 8 hours
-	})
+	}, false)
 
 	normalizeParams(&par)
 	return &Validator{
